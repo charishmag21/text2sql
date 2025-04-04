@@ -1,0 +1,13 @@
+# Virtual environment (if any)
+venv/
+env/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Logs and app output
+logs.txt
+
+# Jupyter notebooks' temp files
+.ipynb_checkpoints/

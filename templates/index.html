@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Text-to-SQL</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #222;
+      --accent: #6a11cb;
+      --btn-bg: #f0f0f0;
+      --btn-hover: #e0e0e0;
+    }
+
+    .dark-mode {
+      --bg: #121212;
+      --text: #e0e0e0;
+      --btn-bg: #1f1f1f;
+      --btn-hover: #333333;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 2rem;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    input, select, button {
+      padding: 0.6rem;
+      margin-top: 0.5rem;
+      width: 60%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      background-color: var(--btn-bg);
+      color: var(--text);
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--btn-hover);
+      cursor: pointer;
+    }
+
+    pre {
+      background: var(--btn-bg);
+      padding: 1rem;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      transition: background 0.3s;
+    }
+
+    h2 {
+      font-size: 1.7rem;
+      margin-bottom: 1rem;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .toggle {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .toggle input {
+      margin-left: 8px;
+      transform: scale(1.2);
+    }
+
+    .copy-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+
+    a {
+      text-decoration: none;
+      color: var(--accent);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <a href="/logs">🗂 View Logs</a>
+    <label class="toggle">🌙 Dark Mode
+      <input type="checkbox" onchange="toggleDarkMode()" />
+    </label>
+  </div>
+
+  <h2>🧠 Natural Language to SQL</h2>
+
+  <label>Enter your question:</label><br />
+  <input type="text" id="question" placeholder="e.g. What is the average salary of employees in IT?" /><br /><br />
+
+  <label>Select a schema:</label><br />
+  <select id="schemaDropdown" onchange="applySchema()">
+    <option value="">-- Choose --</option>
+  </select><br /><br />
+
+  <label>Or enter table headers manually:</label><br />
+  <input type="text" id="headers" value="name, department, salary" /><br /><br />
+
+  <button onclick="generateSQL()">🚀 Generate SQL</button><br /><br />
+
+  <h3>🧾 Generated SQL:</h3>
+  <pre id="output"></pre>
+  <button id="copyBtn" class="copy-btn" onclick="copyToClipboard()">📋 Copy SQL</button>
+
+  <script>
+    async function generateSQL() {
+      const question = document.getElementById("question").value;
+      const headers = document.getElementById("headers").value.split(",").map(h => h.trim());
+
+      const response = await fetch("/generate_sql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question, headers })
+      });
+
+      const data = await response.json();
+      document.getElementById("output").textContent = data.sql || data.error || "No response";
+    }
+
+    function copyToClipboard() {
+      const sql = document.getElementById("output").textContent;
+      navigator.clipboard.writeText(sql).then(() => {
+        alert("✅ SQL copied to clipboard!");
+      });
+    }
+
+    async function fetchPresets() {
+      const response = await fetch("/get_presets");
+      const data = await response.json();
+      const dropdown = document.getElementById("schemaDropdown");
+
+      for (let key in data) {
+        let option = document.createElement("option");
+        option.value = key;
+        option.text = key;
+        dropdown.appendChild(option);
+      }
+    }
+
+    function applySchema() {
+      const schemaName = document.getElementById("schemaDropdown").value;
+      if (!schemaName) return;
+
+      fetch("/get_presets")
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("headers").value = data[schemaName].join(", ");
+        });
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+
+    window.onload = fetchPresets;
+  </script>
+
+</body>
+</html>
