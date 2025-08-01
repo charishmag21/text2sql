@@ -1,0 +1,20 @@
+Basic
+Show all customers.
+List all employees.
+What are the names of all products?
+Get all orders from 2024.
+
+Intermediate
+Show all customers from Canada.
+List customers who joined after January 2023.
+Find products with price over $500
+Count the total number of orders.
+Show customers whose email ends with '@gmail.com'.
+
+Advanced
+Show all customers from Canada who work as a Data Scientist with salary more than 200k per annum.
+Find the average salary of employees by department.
+List the top 5 products by sales in the last year.
+Show all orders with more than 3 products.
+Get customers who have not placed any orders.
+List employees who have not taken any leave this year.

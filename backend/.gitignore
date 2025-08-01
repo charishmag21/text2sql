@@ -1,0 +1,17 @@
+# Python virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# dotenv environment variables
+.env
+
+# OS files
+.DS_Store
+*.log
