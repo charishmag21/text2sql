@@ -55,7 +55,7 @@ npm run dev
 - By default, the React frontend points to `localhost:5000` for the API. Change `API_BASE` in `frontend/src/components/QuestionToSQL.jsx` if your backend is deployed elsewhere.
 
 
-## ⚡ Tech Stack
+## Tech Stack
 
 | Layer      | Technology         | Description                      |
 |------------|--------------------|----------------------------------|
