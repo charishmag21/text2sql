@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { FiCopy } from "react-icons/fi"; // Import a copy icon
 
-const API_BASE = "http://localhost:5000/api";
+// const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://text2sql-xf5w.onrender.com/api";
 
 export default function QuestionToSQL() {
   const [question, setQuestion] = useState("");
